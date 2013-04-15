@@ -1,5 +1,5 @@
 class basichost (
-    $packages = $basichost::params::packages,
+    $default_gateway = ${::default_gateway},
     $iface_dir = $basichost::params::iface_dir,
     $iface_file = $basichost::params::iface_file,
     $dhclient_directory  = $basichost::params::dhclient_directory,
@@ -7,6 +7,7 @@ class basichost (
     $dhclient_hasstatus = $basichost::params::dhclient_hasstatus,
     $dhclient_start = $basichost::params::dhclient_start,
     $dhclient_stop = $basichost::params::dhclient_stop,
+    $packages = ['bash', 'tmux'],
     $resolv_conf = {'domain'=>'','search'=>'','nameservers'=>[]},
     $directories = ['/home'],
     $static_address = {},
@@ -19,6 +20,10 @@ class basichost (
     package { $packages: ensure=>present }
 
     # Network Interfaces
+    file { $iface_dir :
+        ensure  => 'directory',
+    }
+
     file { "${iface_dir}/${iface_file}" :
         content => template("basichost/${osfamily}/${iface_file}"),
     }
@@ -40,10 +45,6 @@ class basichost (
     }
 
     # System Directories
-    file { $iface_dir :
-        ensure  => 'directory',
-    }
-
     file { $directories :
         ensure  => 'directory',
     }

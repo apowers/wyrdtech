@@ -7,7 +7,6 @@ class basichost::params {
 
     case $osfamily {
         'Debian': {
-            $packages   = ['bash', 'tmux']
             $iface_dir  = '/etc/network'
             $iface_file = 'interfaces'
             $dhclient_directory = '/etc/dhcp'
@@ -17,7 +16,6 @@ class basichost::params {
             $dhclient_stop = '/usr/sbin/killall dhclient'
         }
         'FreeBSD': {
-            $packages   = ['bash', 'tmux']
             $iface_dir  = '/etc/rc.conf.d'
             $iface_file = 'interfaces'
             $dhclient_directory = '/etc/'
@@ -25,7 +23,6 @@ class basichost::params {
             $dhclient_hasstatus = true
         }
         default : {
-            $packages   = ['bash', 'tmux']
             $iface_file = 'interfaces'
             $iface_dir  = '/etc/network'
             $iface_file = 'interfaces'

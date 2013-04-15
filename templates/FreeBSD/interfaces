@@ -2,7 +2,7 @@
 # This file is managed by Puppet. Local changes will be reverted.
 #======================================================================
 
-<% interfaces.each do |iface| 
+<% interfaces.each do |iface|
 next if iface == 'lo0'
 case iface
     when 'em0' then @ipaddress = @ipaddress_em0 ; @netmask = @netmask_em0
@@ -20,4 +20,6 @@ ifconfig_<%= iface %>="DHCP"
 <% end -%>
 <% end -%>
 
-defaultrouter=204.174.42.1
+<% if @default_gw -%>
+defaultrouter=<%= @default_gw %>
+<% end -%>

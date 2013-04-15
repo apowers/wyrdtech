@@ -6,21 +6,25 @@
 auto lo
 iface lo inet loopback
 
-auto eth0
-<% if @static_address['eth0'] -%>
-iface eth0 inet static
-  address <%= @ipaddress_eth0 %>
-  netmask <%= @netmask_eth0 %>
-#  gateway 
-<% else -%>
-iface eth0 inet dhcp
+<% interfaces_a.each do |iface| -%>
+<% next if iface =~ /lo\d*/ -%>
+<% next if iface =~ /carp\d*/ -%>
+<% next if iface =~ /vlan\d*/ -%>
+<% @macaddress = instance_variable_get("@macaddress_" + iface) -%>
+<% @ipaddress    = instance_variable_get("@ipaddress_" + iface) -%>
+<% @netmask    = instance_variable_get("@netmask_" + iface) -%>
+
+auto <%= iface %>
+<% if @static_address[iface] -%>
+iface <%= iface %> inet static
+  address <%= @ipaddress %>
+  netmask <%= @netmask %>
+<% if @default_gateway -%>
+  gateway <%= @default_gateway %>
 <% end -%>
 
-auto eth1
-<% if @static_address['eth1'] -%>
-iface eth1 inet static
-  address <%= @ipaddress_eth1 %>
-  netmask <%= @netmask_eth1 %>
 <% else -%>
-iface eth1 inet dhcp
+iface <%= iface %> inet dhcp
+<% end -%>
+
 <% end -%>

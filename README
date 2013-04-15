@@ -4,6 +4,8 @@ with a valid network configuration.
 * Common packages
 * Network interface configuration
 * dhclient configuration
+* /etc/skel files
+* Universal directories like '/home'.
 
 Hiera YAML
 ---
@@ -11,6 +13,7 @@ Hiera YAML
 # String $basichost::resolv_conf['search']
 # Array  $basichost::resolv_conf['nameservers']
 # Array  $basichost::directories
+# Array  $basichost::packages
 # Bool   $basichost::static_address[${interface_name}]
 basichost::resolv_conf:
     domain: ''
@@ -21,6 +24,12 @@ basichost::resolv_conf:
 
 basichost::directories:
     - ''
+
+basichost::packages:
+    - ''
+
+basichost::static_address:
+    eth0: true
 
 ============
 NOTES and BUGS
@@ -33,8 +42,12 @@ the most common interface names. It may need to be extended for additional
 interface types, particularly the FreeBSD template.
 (There must be a better way to do that...)
 
-I can only detect the first default route.
+Default route logic is very basic. Only the first default route in the routing table will be recognized.
+It will be added to the dhclient.conf and interfaces file for the first interface.
 
 CARP, VRRP, and virtual VLAN interfaces aren't managed here.
+
+BUGS: Assigning a static address assumes that the current IP address of the system is correct, which may cause
+    trouble if the IP address of the host changes.
 
 TODO: Move DHCP and, maybe, Interfaces file to a new class. Or rename this class to reflect it's real purpose.
