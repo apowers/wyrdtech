@@ -1,0 +1,26 @@
+#======================================================================
+# This file is managed by Puppet. Local changes will be reverted.
+#======================================================================
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+auto eth0
+<% if @static_address['eth0'] -%>
+iface eth0 inet static
+  address <%= @ipaddress_eth0 %>
+  netmask <%= @netmask_eth0 %>
+#  gateway 
+<% else -%>
+iface eth0 inet dhcp
+<% end -%>
+
+auto eth1
+<% if @static_address['eth1'] -%>
+iface eth1 inet static
+  address <%= @ipaddress_eth1 %>
+  netmask <%= @netmask_eth1 %>
+<% else -%>
+iface eth1 inet dhcp
+<% end -%>

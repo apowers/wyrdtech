@@ -1,0 +1,40 @@
+This modules configures basic information that a host needs to boot
+with a valid network configuration.
+
+* Common packages
+* Network interface configuration
+* dhclient configuration
+
+Hiera YAML
+---
+# String $basichost::resolv_conf['domain']
+# String $basichost::resolv_conf['search']
+# Array  $basichost::resolv_conf['nameservers']
+# Array  $basichost::directories
+# Bool   $basichost::static_address[${interface_name}]
+basichost::resolv_conf:
+    domain: ''
+    search: ''
+    nameservers:
+        - ''
+        - ''
+
+basichost::directories:
+    - ''
+
+============
+NOTES and BUGS
+
+This module will configure DHCP with a fallback lease for the current
+IP address of the host.
+
+The 'interfaces' file templates use a case statement to interate over
+the most common interface names. It may need to be extended for additional
+interface types, particularly the FreeBSD template.
+(There must be a better way to do that...)
+
+I can only detect the first default route.
+
+CARP, VRRP, and virtual VLAN interfaces aren't managed here.
+
+TODO: Move DHCP and, maybe, Interfaces file to a new class. Or rename this class to reflect it's real purpose.

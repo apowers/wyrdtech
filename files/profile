@@ -1,0 +1,90 @@
+# bash config
+
+# enviroment variables
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin"
+USER=`id -un`
+MAIL=/var/mail/$USER
+HISTSIZE=1000
+HISTFILESIZE=1000
+EDITOR=vi
+TERM=xterm
+PAGER=less
+LESS='-Misc'
+
+# export the variables to the os
+export PATH USER MAIL HISTSIZE HISTFILESIZE EDITOR TERM LANG
+export FTP_PASSIVE_MODE=true
+export PAGER LESS
+
+case `uname` in
+    FreeBSD)
+        export LANG=en_US.UTF-8;;
+    Linux)
+        export LANG=en_US.utf8;;
+    *);;
+esac
+
+# file creation mask is 664
+umask 002
+
+# turn on interactive line editing
+set -o emacs
+
+# don't acidentally clobber files with pipes
+set -o noclobber
+
+# don't exit shell with ^D
+set -o ignoreeof
+
+# BASH vs SH options
+if [ $BASH ] ; then
+    shopt -s histappend
+    export PS1="\u@\h:\w\$"
+else
+    PS1="$USER@`hostname`:"
+    case `id -u` in
+    0) PS1="${PS1}# ";;
+    *) PS1="${PS1}$ ";;
+    esac
+    export PS1
+fi
+
+# identify file/directories in command completion
+# Does this need to go in inputrc?
+set visible-stats on
+set show-all-if-ambiguous on
+
+# don't save commands into hitory if they already exist and ignore lines beginning with whitespace
+export HISTCONTROL=ignoreboth
+
+# more informative ls, ps
+case `uname` in
+    FreeBSD)
+        alias ll='ls -lahFGT'
+        alias la='ls -aFG'
+        alias p='ps axo user,pid,stat,time,command'
+        alias netstat='netstat -nf inet'
+    ;;
+    Linux)
+        alias ll='ls -lahFv --color=auto --time-style=locale'
+        alias la='ls -aFv --color=auto'
+        alias p='ps axo user,pid,stat,bsdtime,command'
+        alias netstat='netstat -ntu'
+    ;;
+    *)
+        alias ll='ls -laF'
+        alias la='ls -aF'
+        alias p='ps aux'
+        alias netstat='netstat -n'
+    ;;
+esac
+
+# Number lines in less, vi
+alias less='less -NMisc'
+export EXINIT='set number'
+
+# key bindings for bash
+if [ $BASH ] ; then
+    if [ -f /home/.inputrc ] ; then bind -f /home/.inputrc ; fi
+    if [ -f ~/.inputrc ] ; then bind -f ~/.inputrc ; fi
+fi
