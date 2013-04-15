@@ -6,48 +6,55 @@ Basic host configuration.
 * /etc/skel files
 * Common directories like '/home'.
 
-Written for puppet 3.1, not tested with puppet 2.x
+# Compatibility #
 
-== NOTES
+Paramaterized and hiera compatible.
 
-For non-static interfaces, this module will configure DHCP-client with a
-fallback lease for the current IP address of the host.
+Written for puppet 3.x, not tested with puppet 2.x
 
-The 'interfaces' file templates use a case statement to interate over
-the most common interface names. It may need to be extended for additional
-interface types, particularly the FreeBSD template.
-(There must be a better way to do that...)
+Supports Debian and FreeBSD with CentOS and others coming soon.
+
+# Notes #
+
+For non-static interfaces (default), this module will configure DHCP-client
+with a fallback lease for the current IP address of the host.
 
 CARP, VLAN, and virtual interfaces are ignored.
 
 Assigning a static address assumes that the current IP address of the system is
-correct, which may cause trouble if the IP address of the host changes.
+correct and will be used in the dhclient and interfaces configuration.
 
 Default route logic is very basic. Only the first default route in the routing
 table will be recognized.
 
-== Hiera YAML
+# Hiera YAML #
 
-String:: $basichost::resolv_conf['domain']
-String:: $basichost::resolv_conf['search']
-Array::  $basichost::resolv_conf['nameservers']
-Array::  $basichost::directories
-Array::  $basichost::packages
-Bool::   $basichost::static_address[${interface_name}]
+* String: $basichost::resolv_conf['domain']
+* String: $basichost::resolv_conf['search']
+* Array:  $basichost::resolv_conf['nameservers']
+* Array:  $basichost::directories
+* Array:  $basichost::packages
+* Bool:   $basichost::static_address[${interface_name}]
 
-  basichost::resolv_conf:
+    basichost::resolv_conf:
       domain: ''
       search: ''
       nameservers:
-          - ''
-          - ''
+        - ''
+        - ''
 
-  basichost::directories:
+    basichost::directories:
       - ''
 
-  basichost::packages:
+    basichost::packages:
       - ''
 
-  basichost::static_address:
+    basichost::static_address:
       eth0: true
 
+# TODO #
+
+* CentOS support.
+* MS Windows support?
+* SmartOS support?
+* Even if all interfaces are "static", dhclient will still be started. That might be a problem.

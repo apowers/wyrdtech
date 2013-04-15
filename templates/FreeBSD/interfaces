@@ -2,16 +2,13 @@
 # This file is managed by Puppet. Local changes will be reverted.
 #======================================================================
 
-<% interfaces.each do |iface|
-next if iface == 'lo0'
-case iface
-    when 'em0' then @ipaddress = @ipaddress_em0 ; @netmask = @netmask_em0
-    when 'em1' then @ipaddress = @ipaddress_em1 ; @netmask = @netmask_em0
-    when 'bge0' then @ipaddress = @ipaddress_bge0 ; @netmask = @netmask_bge0
-    when 'bge1' then @ipaddress = @ipaddress_bge1 ; @netmask = @netmask_bge1
-    when 'rl0' then @ipaddress = @ipaddress_rl0 ; @netmask = @netmask_rl0
-    when 'rl1' then @ipaddress = @ipaddress_rl1 ; @netmask = @netmask_rl1
-end
+<% interfaces_a.each do |iface| -%>
+<% next if iface =~ /lo\d*/ -%>
+<% next if iface =~ /carp\d*/ -%>
+<% next if iface =~ /vlan\d*/ -%>
+<% @macaddress = instance_variable_get("@macaddress_" + iface) -%>
+<% @ipaddress    = instance_variable_get("@ipaddress_" + iface) -%>
+<% @netmask    = instance_variable_get("@netmask_" + iface) -%>
 
 <% if @static_address[iface] -%>
 ifconfig_<%= iface %>="<%= @ipaddress %> netmask <%= @netmask %>"

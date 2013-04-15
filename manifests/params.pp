@@ -1,9 +1,7 @@
 class basichost::params {
 
-    # Most base packages are installed with the template, as described here:
-    # https://inside.digipen.edu/main/ITTR:Debian_and_Ubuntu_Installation
-    # https://inside.digipen.edu/main/ITTR:CentOS/Installation
-    # https://inside.digipen.edu/main/ITTR:FreeBSD_Setup
+    # Convert this fact into an array for use in the dhclient.conf template
+    $interfaces_a = split($interfaces,',')
 
     case $osfamily {
         'Debian': {
@@ -31,8 +29,5 @@ class basichost::params {
             $dhclient_hasstatus = true
         }
     }
-
-    # Convert this fact into an array for use in the dhclient.conf template
-    $interfaces_a = split($interfaces,',')
 
 }
