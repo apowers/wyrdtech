@@ -1,3 +1,10 @@
+# Abandoned #
+
+This was my first module. I have since abandoned it in favor
+of several modules that do more specific things. 
+
+# Description #
+
 Basic host configuration.
 
 * Network interface configuration
@@ -31,26 +38,26 @@ table will be recognized.
 
 * String: $basichost::resolv_conf['domain']
 * String: $basichost::resolv_conf['search']
-* Array:  $basichost::resolv_conf['nameservers']
-* Array:  $basichost::directories
-* Array:  $basichost::packages
-* Bool:   $basichost::static_address[${interface_name}]
+* Array: $basichost::resolv_conf['nameservers']
+* Array: $basichost::directories
+* Array: $basichost::packages
+* Bool: $basichost::static_address[<interface_name>]
 
     basichost::resolv_conf:
-      domain: ''
-      search: ''
-      nameservers:
-        - ''
-        - ''
+    domain: ''
+    search: ''
+    nameservers:
+    - ''
+    - ''
 
     basichost::directories:
-      - ''
+    - ''
 
     basichost::packages:
-      - ''
+    - ''
 
     basichost::static_address:
-      eth0: true
+    <interface_name>: <true|false>
 
 # TODO #
 
